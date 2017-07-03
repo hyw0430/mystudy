@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--  
+		加入 SpringSecurity:
+		1. 加入 jar 包
+		2. 在 web.xml 文配置 SpringSecurity 的 Filter
+		3. 在 Spring 的配置文件中配置 SpringSecurity 的相关信息
+		3.1 配置需要保护哪些资源 ? 以及访问这些资源需要什么权限 ?
+		3.2 配置用户的信息: 包括用户名, 密码, 以及用户所有的权限. 
+	-->
+	
+	<!-- 1. 加入 security 的命名空间 -->
+	<!-- 2. 配置受保护的资源和访问该资源需要的权限. auto-config=true 会使 SpringSecurity 完成一些默认的配置. -->
+	<!--  
+		1. 创建 DefaultFilterInvocationSecurityMetadataSource 类的 bean, 在其中装配受保护的资源和权限的信息
+		1.1 创建 DefaultFilterInvocationSecurityMetadataSource 的子类, 在其中实现自己的逻辑.
+		不能实现, 因为不能再 super() 调用父类构造器之前初始化其 requestMap 属性. 
+		1.2 使用 FactoryBean 的方式来创建 DefaultFilterInvocationSecurityMetadataSource 的实现. 
+		
+		2. 把 1 创建的 bean 替换  FilterSecurityInterceptor 的 securityMetadataSource 属性. 
+		2.1 在 BeanPostProcessor 中替换 FilterSecurityInterceptor 的 securityMetadataSource 属性
+		
+		3. 抽取获取 资源和受保护权限 的方法做成一个接口, 并把其作为 DefaultFilterInvocationSecurityMetadataSource
+		所在 FactoryBean 的一个成员变量更有利于代码的解耦. 
+	-->
+	<security:http auto-config="true">
+		<!-- access 所对应的权限必须以 ROLE_ -->
+		<!-- 
+		<security:intercept-url pattern="/user.jsp" access="ROLE_USER"/>
+		<security:intercept-url pattern="/admin.jsp" access="ROLE_ADMIN"/>
+		-->
+		
+		<!-- 
+			配置登陆的表单页面 
+			
+			default-target-url: 若直接访问的是登陆页面, 在之前没有访问过任何其他的受保护的页面, 则登陆成功后相应的是
+			该属性指定的页面. 默认响应 index.jsp
+			always-use-default-target: 只要登陆成功总是响应 default-target-url 指定的页面. 默认是相应之前访问的
+			那个受保护的页面. 
+			authentication-failure-url: 登陆失败的响应页面. 默认为 login-page 指向的页面.
+			
+			authentication-success-handler-ref: 指向 AuthenticationSuccessHandler 接口实现类的一个 bean.
+			若登陆成功. 则会调用 AuthenticationSuccessHandler 接口的 onAuthenticationSuccess 方法. 可以在其中
+			添加登陆成功后的业务逻辑. 此时将忽略 default-target-url 和 always-use-default-target
+			
+			authentication-failure-handler-ref: 和 authentication-success-handler-ref 类似. 
+		-->
+		<security:form-login
+			login-page="/security-login.jsp"
+			
+			username-parameter="username"
+			password-parameter="password"
+			login-processing-url="/security-login"
+			
+			default-target-url="/list.jsp"
+			always-use-default-target="true"
+			
+			authentication-success-handler-ref="authenticationSuccessHandler"
+			/>
+		
+		<!-- 
+			配置登出的 url 
+			1. logout-url: 登出的 URL
+			2. logout-success-url: 登出成功后的响应页面, 默认为 index.jsp
+			3. invalidate-session: 登出成功后, 是否销毁 Session
+			4. success-handler-ref: 指向一个实现 LogoutSuccessHandler 接口的 bean.
+			可以在其中编写登陆实际的业务逻辑. 
+			注意: logout-success-url 和 success-handler-ref 只能使用一个. 
+		-->
+		<security:logout
+			logout-url="/security-logout"
+			invalidate-session="true"
+			success-handler-ref="logoutSuccessHandler"
+			/>
+		
+	</security:http>
+	
+	<bean class="springsecurity.MyBeanPostProcessor"></bean>
+	
+	<bean id="filterInvocationSecurityMetadataSourceMapBuilder"
+		class="springsecurity.FilterInvocationSecurityMetadataSourceMapBuilderImpl"></bean>
+	
+	<bean id="filterInvocationSecurityMetadataSource"
+		class="springsecurity.MyFilterInvocationSecurityMetadataSource2">
+		<property name="builder" ref="filterInvocationSecurityMetadataSourceMapBuilder"></property>	
+	</bean>
+	
+	<bean id="authenticationSuccessHandler"
+		class="springsecurity.MyAuthenticationSuccessHandler"></bean>
+	
+	<bean id="logoutSuccessHandler"
+		class="springsecurity.MyLogoutSuccessHandler"></bean>
+	
+	<!-- 3. 配置用户信息: 用户名、密码及用户所有的权限 -->
+	<!--  
+		自定义用户信息: 可以创建 UserDetailsService 接口的实现类. 把其配置为 security:authentication-provider
+		节点的 user-service-ref 属性即可.
+	-->
+	<bean id="userDetailsService"
+		class="springsecurity.MyUserDetailsService"></bean>
+	
+	<security:authentication-manager>
+		<security:authentication-provider user-service-ref="userDetailsService">
+			<!-- 设置密码的加密方式 -->
+			<security:password-encoder hash="md5">
+				<security:salt-source user-property="username"/>	
+			</security:password-encoder>
+			
+			<!--  
+			<security:user-service>
+				<security:user name="user" password="user" authorities="ROLE_USER"/>
+				<security:user name="admin" password="admin" authorities="ROLE_USER, ROLE_ADMIN"/>
+			</security:user-service>
+			-->
+			
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+</beans>
