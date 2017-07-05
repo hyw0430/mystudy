@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.devMode" value="true" />
+
+    <package name="default" namespace="/" extends="struts-default">
+    	
+    	<!-- 全局的result配置 -->
+    	<global-results>
+    		<result name="global-err">/globalMsg.jsp</result>
+    	</global-results>
+    
+    	<!-- 全局的声明式异常配置 -->
+    	<global-exception-mappings>
+    		<!-- exception属性：指定要捕获的异常类型 -->
+    		<!-- result属性：捕获到异常后要执行的结果，这里必须使用一个全局的result -->
+    		<exception-mapping result="global-err" exception="java.lang.ArithmeticException"/>
+    	</global-exception-mappings>
+    
+    	<action name="daoDanAction"
+    			class="com.atguigu.ex.action.ExceptionAction"
+    			method="daoDanAction">
+    		<!-- 配置当前action的声明式异常 -->
+    		<!-- exception属性：指定要捕获的异常类型 -->
+    		<!-- result属性：捕获到异常后要执行的结果 -->
+    		<exception-mapping result="errorPage" exception="java.lang.ArithmeticException"/>
+    		
+    		<result>/good.jsp</result>
+    		
+    		<result name="errorPage">/makeException.jsp</result>
+    		
+    	</action>
+    	
+    	<action name="daoMeiAction"
+    			class="com.atguigu.ex.action.ExceptionAction"
+    			method="daoMeiAction">
+    		<result>/good.jsp</result>
+    	</action>
+
+    </package>
+
+</struts>

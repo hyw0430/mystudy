@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<!-- 设置Struts2国际化资源文件的基名 -->
+	<constant name="struts.custom.i18n.resources" value="baseName"/>
+	
+    <constant name="struts.devMode" value="true" />
+
+    <package name="default" namespace="/" extends="struts-default">
+    
+	 	<action name="toLoginPage">
+	 		<result>/login.jsp</result>
+	 	</action>
+    
+    	<action name="I18NAction"
+    			class="com.atguigu.i18n.action.I18NAction">
+    		<result>/result.jsp</result>
+    	</action>
+    	
+    	<action name="testValueStackMsg" 
+    			class="com.atguigu.i18n.action.I18NAction"
+    			method="testValueStackMsg">
+    		<result>/result.jsp</result>		
+    	</action>
+
+    </package>
+
+</struts>

@@ -1,0 +1,16 @@
+<!DOCTYPE validators PUBLIC
+        "-//Apache Struts//XWork Validator 1.0.2//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.2.dtd">
+
+<validators>
+
+	<!-- 使用OGNL表达式设定验证规则 -->
+	<validator type="expression">
+		<!-- 由于验证规则OGNL表达式有可能包含XML特殊符号，所以需要放在CDATA节中 -->
+		<param name="expression">
+			<![CDATA[userPwd==userPwdAgain]]>
+		</param>
+		<message key="pwd.error.message"/>
+	</validator>
+
+</validators>

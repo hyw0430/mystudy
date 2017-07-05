@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.devMode" value="true" />
+
+    <package name="default" namespace="/" extends="struts-default">
+    
+    	<!-- URL地址：/bookAction_saveBook.action -->
+    	<!-- action的name：bookAction_saveBook -->
+    	<!-- *匹配到的内容：save -->
+    	<!-- action配置中的所有{1}都由save代替 -->
+    	<action name="bookAction_*Book" 
+    			class="com.atguigu.wildcard.action.BookAction"
+    			method="{1}">
+    		<result name="{1}-success">/result/{1}Success.jsp</result>
+    	</action>
+    
+    	<!-- URL地址：/bookAction_saveBook.action -->
+    	<action name="bookAction_save*" 
+    			class="com.atguigu.wildcard.action.BookAction"
+    			method="processBook">
+    		<result name="save-success">/result/saveSuccess.jsp</result>
+    	</action>
+    	
+    	<!-- 精确匹配比模糊匹配优先级更高 -->
+    	<!-- <action name="bookAction_saveBook" 
+    			class="com.atguigu.wildcard.action.BookAction"
+    			method="saveOther">
+    		<result name="save-success">/result/saveSuccess.jsp</result>
+    	</action> -->
+    
+    	<!-- <action name="bookAction_saveBook" 
+    			class="com.atguigu.wildcard.action.BookAction"
+    			method="save">
+    		<result name="save-success">/result/saveSuccess.jsp</result>
+    	</action>
+    	
+    	<action name="bookAction_removeBook" 
+    			class="com.atguigu.wildcard.action.BookAction"
+    			method="remove">
+    		<result name="remove-success">/result/removeSuccess.jsp</result>		
+    	</action>
+    	
+    	<action name="bookAction_editBook" 
+    			class="com.atguigu.wildcard.action.BookAction"
+    			method="edit">
+    		<result name="edit-success">/result/editSuccess.jsp</result>		
+    	</action>
+    	
+    	<action name="bookAction_queryBook" 
+    			class="com.atguigu.wildcard.action.BookAction"
+    			method="query">
+    		<result name="query-success">/result/querySuccess.jsp</result>		
+    	</action> -->
+
+    </package>
+
+</struts>

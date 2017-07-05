@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- constant标签用于修改Struts2内置的一些常量的值 -->
+	<!-- struts.enable.DynamicMethodInvocation值用于控制是否开启“动态方法”调用功能，默认为false -->
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    
+    <!-- struts.devMode值用于控制是否开启“开发者”模式，如果开启这个模式如果发生了错误，
+    	则由Struts2在页面上显示错误消息，好处是404错误时会有提示 -->
+    <constant name="struts.devMode" value="true" />
+
+	<!-- 
+	package标签：用于将action的配置组织到一起，每一个Struts2配置文件都可以有多个package标签
+		1.name属性：当前package的名称，用于其他package引用
+		2.namespace属性：用于指定所有action的统一访问地址
+		3.extends属性：用于指定当前package所继承的package。默认是继承Struts2提供的一个package，通常这个package是必须继承的，否则Struts2不能正常工作
+		4.Struts2提供的struts-default这个package中包含的配置信息
+			[1]所有结果类型的定义
+			[2]所有拦截器的定义
+			[3]内置的拦截器栈的定义
+			[4]默认拦截器栈的定义
+			[5]默认Action类的定义
+	action标签：用于配置Struts2请求
+		1.name属性：用于指定一个action的名称，便于页面上通过超链接访问这个action，相当于servlet的url-pattern的作用
+		2.class属性：用于指定处理当前Struts2请求的Action类的全类名
+			默认值：com.opensymphony.xwork2.ActionSupport
+		3.method属性：用于指定处理当前请求的Action方法的方法名
+			默认值：execute
+	result标签：用于配置Struts2请求处理的结果，通俗的来说就是请求处理完成后要去的地方
+		name属性：用于和Action方法的String类型的返回值相对应，默认值：success
+	 -->
+    <package name="default" namespace="/" extends="struts-default">
+    
+    	<!-- /saveUI.action -->
+    	<!-- 省略了默认值的简化版本 -->
+    	<!-- <action name="saveUI">
+    		<result>/saveUI.jsp</result>
+    	</action> -->
+    	
+    	<!-- 不省略默认值的完整版 -->
+    	<action name="saveUI"
+    			class="com.opensymphony.xwork2.ActionSupport" 
+    			method="execute">
+    		<result name="success">/saveUI.jsp</result>
+    	</action>
+    	
+    	<!-- /saveBook.action -->
+	 	<action name="saveBook"
+	 			class="com.atguigu.helloworld.action.BookAction"
+	 			method="saveBook">
+	 		<result name="save-success">/detail.jsp</result>
+	 	</action>
+
+    		<!-- <result name="edit-success">/edit.jsp</result>
+    		<result name="del-success">/del.jsp</result>
+    		<result name="update-success">/update.jsp</result> -->
+    </package>
+
+	<!-- 包含其他Struts2配置文件，好处是将配置信息按照不同功能模块分配到各自配置文件中，避免一个配置文件太长 -->
+    <!-- <include file="example.xml"/> -->
+
+    <!-- Add packages here -->
+
+</struts>

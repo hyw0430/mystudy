@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<constant name="struts.custom.i18n.resources" value="i18n"/>
+
+    <constant name="struts.devMode" value="true" />
+
+    <package name="default" namespace="/" extends="struts-default">
+    
+    	<action name="special" 
+    			class="com.atguigu.validation.action.ValidationAction01"
+    			method="special">
+    		<result>/success.jsp</result>
+    		<result name="input">/test07.jsp</result>
+    	</action>
+    
+    	<action name="test*" class="com.atguigu.validation.action.ValidationAction{1}">
+    		<result>/success.jsp</result>
+    		<result name="input">/test{1}.jsp</result>
+    	</action>
+    
+    	<!-- <action name="test01" class="com.atguigu.validation.action.ValidationAction01">
+    		<result>/success.jsp</result>
+    		<result name="input">/test01.jsp</result>
+    	</action>
+    	
+    	<action name="test02" class="com.atguigu.validation.action.ValidationAction02">
+    		<result>/success.jsp</result>
+    		<result name="input">/test02.jsp</result>
+    	</action> -->
+
+    </package>
+
+</struts>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.devMode" value="true" />
+
+    <package name="default" namespace="/" extends="struts-default">
+    
+    	<action name="getAppMap"
+    		class="com.atguigu.webres.action.WebResAction"
+    		method="getAppMap">
+    		<result>/result.jsp</result>	
+    	</action>
+    	
+    	<action name="getSessionMap"
+    		class="com.atguigu.webres.action.WebResAction"
+    		method="getSessionMap">
+    		<result>/result.jsp</result>
+    	</action>
+    	
+    	<action name="getParamMap"
+    		class="com.atguigu.webres.action.WebResAction"
+    		method="getParamMap">
+    		<result>/result.jsp</result>
+    	</action>
+    	
+    	<action name="getRequestMap"
+    		class="com.atguigu.webres.action.WebResAction"
+    		method="getRequestMap">
+    		<result>/result.jsp</result>
+    	</action>
+    	
+    	<action name="testXxxAware"
+    		class="com.atguigu.webres.action.InjectResAction">
+    		<result>/result.jsp</result>	
+    	</action>
+    	
+    	<action name="testServletActionContext"
+    		class="com.atguigu.webres.action.OldWebResAction">
+    		<result>/result.jsp</result>	
+    	</action>
+    	
+    	<action name="testServletXxxAware"
+    		class="com.atguigu.webres.action.InjectOldResAction">
+    		<result>/result.jsp</result>	
+    	</action>
+    	
+    </package>
+
+</struts>

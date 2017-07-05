@@ -1,0 +1,22 @@
+<!DOCTYPE validators PUBLIC
+        "-//Apache Struts//XWork Validator 1.0.2//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.2.dtd">
+
+<validators>
+
+	<field name="email">
+		<!-- 指定字符串长度范围是8~15之间 -->
+		<!-- short-circuit="true"表示字符串长度不正确就不检查格式了 -->
+		<field-validator type="stringlength" short-circuit="true">
+			<param name="minLength">8</param>
+			<param name="maxLength">15</param>
+			<param name="trim">true</param>
+			<message key="email.length.message" />
+		</field-validator>
+		<!-- 验证Email格式 -->
+		<field-validator type="email">
+			<message key="email.pattern.message"/>
+		</field-validator>
+	</field>
+
+</validators>

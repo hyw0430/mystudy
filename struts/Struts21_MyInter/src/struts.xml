@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.devMode" value="true" />
+
+    <package name="default" namespace="/" extends="struts-default">
+    
+		<interceptors>
+			<!-- 注册自定义拦截器，给全类名分配一个简短的友好名称 -->
+			<interceptor name="userNameInterceptor" class="com.atguigu.inter.interceptor.MyInterceptor">
+				<param name="interceptParam">我还想再活500年</param>
+			</interceptor>
+			<!-- 声明自定义拦截器栈 -->
+			<interceptor-stack name="myStack">
+				<!-- 在全局范围内引用自定义拦截器 -->
+				<interceptor-ref name="userNameInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+		</interceptors>
+		
+		<!-- 引用自定义拦截器栈 -->
+		<default-interceptor-ref name="myStack"/>
+		
+		<action name="UserAction"
+				class="com.atguigu.inter.action.UserAction">
+			<!-- 在action级别引用自定义拦截器 -->
+			<interceptor-ref name="userNameInterceptor"/>
+			<interceptor-ref name="defaultStack"/>
+			<result>/result.jsp</result>
+			<result name="input">/index.jsp</result>
+		</action>
+		
+		<action name="BookAction"
+			class="com.atguigu.inter.action.UserAction">
+			<result>/result.jsp</result>
+			<result name="input">/index.jsp</result>
+		</action>
+
+    </package>
+
+</struts>

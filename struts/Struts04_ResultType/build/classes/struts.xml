@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.devMode" value="true" />
+
+    <package name="default" namespace="/" extends="struts-default">
+    
+    	<action name="resultType_dispatcher">
+    		<!-- 转发到result.jsp -->
+    		<result type="dispatcher">/result.jsp</result>
+    	</action>
+    	
+    	<action name="resultType_redirect">
+    		<!-- 重定向到result.jsp -->
+    		<result type="redirect">/result.jsp</result>
+    	</action>
+    	
+    	<action name="resultType_redirectToAction">
+    		<!-- 重定向到目标Action -->
+    		<result type="redirectAction">
+    			<!-- 指定要前往的目标Action的name属性值 -->
+    			<param name="actionName">targetAction</param>
+    			<!-- 指定要前往的目标Action所在namespace，如果是默认值"/"则可以省略 -->
+    			<param name="namespace">/newNameSpace</param>
+    		</result>
+    	</action>
+    	
+    	<!-- 
+    	既然目标Action可以通过URL地址访问，则重定向到目标Action也可以通过“重定向到目标Action的URL地址”的方式实现
+    	 -->
+    	<action name="resultType_redirectDirect">
+    		<!-- 直接重定向到目标Action -->
+    		<result type="redirect">/newNameSpace/targetAction.action</result>
+    	</action>
+    	
+    	<!-- 能否通过转发的方式，将请求转发到目标Action对应的URL地址？ -->
+    	<!-- 答案：否，不能直接转发到目标Action的URL地址，因为转发过去的请求核心Filter拦截不到 -->
+    	<action name="resultType_dispatcherToAction">
+    	
+    		<!-- <result type="dispatcher">/newNameSpace/targetAction.action</result> -->
+    		<result type="chain">
+    			<!-- 指定要前往的目标Action的name属性值 -->
+    			<param name="actionName">targetAction</param>
+    			<!-- 指定要前往的目标Action所在namespace，如果是默认值"/"则可以省略 -->
+    			<param name="namespace">/newNameSpace</param>
+    		</result>
+    	
+    	</action>
+
+    </package>
+    
+    <package name="/other" namespace="/newNameSpace" extends="struts-default">
+    
+    	<action name="targetAction" class="com.atguigu.result.action.TargetAction">
+    		
+    		<result>/resultOfTargetAction.jsp</result>
+    	
+    	</action>
+    
+    </package>
+
+</struts>

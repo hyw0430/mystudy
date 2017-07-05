@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC
+        "-//Apache Struts//XWork Validator Definition 1.0//EN"
+        "http://struts.apache.org/dtds/xwork-validator-definition-1.0.dtd">
+
+<!-- START SNIPPET: validators-default -->
+<validators>
+	<!-- 将自定义验证器全类名和验证规则关联起来 -->
+    <validator name="idCardCheck" class="com.atguigu.validation.myvalidator.IDCardValidator"/>
+</validators>

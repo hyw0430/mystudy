@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.custom.i18n.resources" value="i18n"/>
+
+    <package name="default" namespace="/" extends="struts-default">
+		
+		<action name="tokenAction"
+				class="com.atguigu.token.action.TokenAction">
+			<!-- 引入token拦截器 -->
+			<!-- 注意：还需要将默认拦截器栈引入，否则将只执行token拦截器 -->
+			<interceptor-ref name="token"/>
+			<!-- 引入默认拦截器栈 -->
+			<interceptor-ref name="defaultStack"/>
+			<result>/result.jsp</result>	
+			<result name="invalid.token">/index.jsp</result>	
+		</action>
+		
+		<action name="tokenSessionAction"
+				class="com.atguigu.token.action.TokenAction">
+			
+			<!-- 引入tokenSession拦截器 -->
+			<interceptor-ref name="tokenSession"/>
+			<interceptor-ref name="defaultStack"/>
+			
+			<result>/result.jsp</result>
+			
+		</action>
+		
+    </package>
+
+</struts>
