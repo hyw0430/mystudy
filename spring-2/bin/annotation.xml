@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!--  
+		泛型依赖注入:
+		1. 可以根据泛型类型注入对应的 bean. 
+		2. 注意: 若在 IOC 中没有对应泛型的 bean, 则会抛出异常. 
+	-->
+
+
+	<!-- 
+		扫描哪些包中带注解的 bean ? 
+		base-package: 扫描指定的包及其子包中包含注解的类. 
+		
+		1. 导入 context 命名空间
+		2. 使用 context:component-scan 节点的 base-package 属性指定扫描的包
+		3. 在需要被扫描的包上添加注解.
+		4. 在需要装配的属性上添加 @Autowire 注解. 
+	-->
+	<context:component-scan base-package="com.atguigu.spring"></context:component-scan>
+
+</beans>

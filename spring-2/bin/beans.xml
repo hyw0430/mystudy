@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<!--  
+		使用 FactoryBean 的方式来配置 bean. 
+	-->
+	<bean id="testFactoryBean"
+		class="com.atguigu.spring.MyCarFactoryBean"></bean>
+
+	<!-- 了解: 配置 bean 的方式之: 工厂方法.  -->
+	<!--  
+		静态工厂方法:
+		可以不创建工厂实例, 直接调用工厂的静态方法来生成 bean 
+	-->
+	<bean id="timeFormat"
+		class="java.text.DateFormat" factory-method="getTimeInstance"></bean>
+	
+	<!--  
+		实例工厂方法:
+		先需要创建工厂的实例, 再调用工厂的方法来生产 bean
+	-->
+	<!-- 配置实例工厂的 bean -->
+	<bean id="dateFormat"
+		class="java.text.SimpleDateFormat">
+		<constructor-arg value="yyyy-MM-dd"/>	
+	</bean>
+	
+	<!-- 通过实例工厂 bean 的方法来创建另一个 bean 的实例 -->
+	<bean id="birth"
+		factory-bean="dateFormat" factory-method="parse">
+		<!-- 若需要传递参数, 使用 constructor-arg 节点来传递参数  -->
+		<constructor-arg value="1990-12-12"></constructor-arg>	
+	</bean>
+	
+	<bean id="testStaticFactoryMethod"
+		class="com.atguigu.spring.Person">
+		<property name="birth" ref="birth"></property>	
+	</bean>
+
+	<!--  
+		BeanPostProcessor: Bean 后置处理器.
+		1. 自定义的 BeanPostProcessor 需要实现 BeanPostProcessor 接口
+		2. 在 IOC 容器中配置 BeanPostProcessor 时, 不需要配置 id, IOC 容器会自动的识别为
+		BeanPostProcessor. 并自动的调用 BeanPostProcessor 的方法
+		3. BeanPostProcessor 的方法, 参见类中的注释.  
+	-->
+	<bean class="com.atguigu.spring.MyBeanPostProcessor"></bean>
+
+	<!-- 
+		bean 的生命周期 
+		1. 调用构造器创建对象
+		2. 调用 setter 为属性初始化
+		3. 调用 BeanPostProcessor 的 postProcessBeforeInitialization 方法
+		4. 调用 init-method
+		5. 调用 BeanPostProcessor 的 postProcessAfterInitialization 方法
+		6. bean 可以使用
+		7. 容器关闭的时候, 调用 destroy-method
+	-->
+	<bean id="company"	
+		class="com.atguigu.spring.Company"
+		init-method="init"
+		destroy-method="destroy">
+		<property name="name" value="nokia"></property>	
+	</bean>
+
+	<!-- SpEL: 了解. -->
+	<bean id="xiaolongnv"
+		class="com.atguigu.spring.Person">
+		<property name="lastName" value="longer"></property>
+		<property name="car">
+			<bean class="com.atguigu.spring.Car">
+				<property name="brand" value="honda"></property>
+				<property name="price" value="10"></property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="yangguo"
+		class="com.atguigu.spring.Person">
+		<property name="lastName" value="guoer"></property>	
+		<property name="car" value="#{xiaolongnv.car}"></property>
+	</bean>
+
+	<!-- 
+		使用外部的属性文件 
+		1. 导入 context 命名空间
+		2. 使用 <context:property-placeholder location="classpath:文件名.properties"/> 导入类路径下的属性文件
+		3. 像 EL 表达式那样使用属性文件中的值. 
+	-->
+	<!-- <context:property-placeholder location="classpath:db.properties"/> -->
+	<context:property-placeholder location="classpath:resources/db.properties"/>
+	<bean id="dataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="user" value="${jdbc.user}"></property>	
+		<property name="password" value="${jdbc.password}"></property>
+		<property name="driverClass" value="${jdbc.driverClass}"></property>
+		<property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
+	</bean>
+
+	<!-- 
+		bean 的作用域. 
+		默认情况下, ioc 容器中的 bean 是单例的! 适用于绝大部分情况. 
+		可以通过 scope 属性来配置 bean 的作用域.
+		prototype: 原型的. 即每次调用 getBean 方法都会创建一个新的 bean
+		singleton: 默认值. 单例的. 即每次调用 getBean 方法都返回同一个 bean
+	-->
+	<bean id="testScope"
+		class="com.atguigu.spring.Person"
+		scope="singleton"></bean>
+
+	<bean id="car" class="com.atguigu.spring.Car">
+		<property name="brand" value="toyota"></property>
+		<property name="price" value="100"></property>
+	</bean>
+	
+	<bean id="tom" 
+		class="com.atguigu.spring.Person">
+		<property name="lastName" value="tom"></property>
+		<property name="car" ref="car"></property>	
+	</bean>
+	
+	<!-- 了解: bean 配置的继承. -->
+	<bean id="jerry" parent="tom">
+		<property name="lastName" value="jerry"></property>
+	</bean>
+	
+	<!-- 了解: bean 之间的依赖关系  huangrong不存在时，guojing无法创建 -->
+	<bean id="guojing" depends-on="huangrong" class="com.atguigu.spring.Person"></bean>
+	<bean id="huangrong" class="com.atguigu.spring.Person"></bean>
+
+	<!-- 为 Properties 类型的属性赋值 -->
+	<bean id="testProperties"
+		class="com.atguigu.spring.Person">
+		<property name="properties">
+			<props>
+				<prop key="gender">Male</prop>
+				<prop key="age">21</prop>
+				<prop key="isMarried">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 内部 bean -->
+	<bean id="ms"
+		class="com.atguigu.spring.Person">
+		<property name="lastName" value="mengshuai"></property>
+		<property name="car">
+			<bean class="com.atguigu.spring.Car">
+				<property name="brand" value="hongqi"></property>
+				<property name="price" value="100"></property>
+			</bean>
+		</property>	
+	</bean>
+
+	<!-- bean 之间的引用关系 -->
+	<bean id="personDao"
+		class="com.atguigu.spring.PersonDao"></bean>
+
+	<bean id="personService"
+		class="com.atguigu.spring.PersonService">
+		<property name="personDao" ref="personDao"></property>	
+	</bean>
+	
+	<bean id="personAction"
+		class="com.atguigu.spring.PersonAction">
+		<property name="personService" ref="personService"></property>	
+	</bean>
+
+</beans>

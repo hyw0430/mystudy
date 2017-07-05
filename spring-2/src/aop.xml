@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<context:component-scan base-package="com.atguigu.spring.aop"></context:component-scan>
+	
+	<!--  
+		步骤:
+		1. 导入 aop 的命名空间
+		2. 加入 <aop:aspectj-autoproxy></aop:aspectj-autoproxy> 配置. 使 Spring 可以自动的生成代理对象
+		3. 编写切面类 和 切面方法. 
+		
+		4. 在切面类上标识 @Component. 使其纳入到 IOC 容器中.
+		5. 在切面类上标识 @Aspect. 使其是一个切面类.
+		6. 在方法上添加 AOP 注解.
+		@Before. 并标识其作用于哪个类的哪个方法
+		@Before("execution(public int    com.atguigu.spring.aop.ArithmeticCalculator.add(int, int))")
+		@Before("execution(修饰符    返回值类型   全类名.方法名(参数类型列表))")
+		7. 若需要访问连接点的细节, 则可以在切面方法中添加 JoinPoint 参数, 其可以访问到连接点的更多信息. 
+	-->
+	
+	<!-- 使能够自动的生成 AOP 代理对象. -->
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	
+</beans>

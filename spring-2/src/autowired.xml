@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!--  
+		自动装配:
+		1. 了解.
+		2. 可以通过配置 bean 的 autowire 属性来使 Spring 自动装配 bean 之间的引用
+		byName: 根据属性名和 bean 的 id 进行自动装配. 若没有匹配的则, 无法完成装配. 
+		byType: 根据属性的类型 和 bean 的类型. 若有多个类型的 bean, 则无法完成装配. 
+	-->
+	<bean id="personDao2"
+		class="com.atguigu.spring.PersonDao"></bean>
+		
+	<bean id="personDao3"
+		class="com.atguigu.spring.PersonDao"></bean>
+
+	<bean id="personService"
+		class="com.atguigu.spring.PersonService" autowire="byType"></bean>
+	
+	<bean id="personAction"
+		class="com.atguigu.spring.PersonAction" autowire="byName"></bean>
+	
+</beans>
