@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+
+	<!--  
+	1. 在 WEB 环境下如何来创建 Spring 的 IOC 容器. 
+	1.1 加入 Spring 的 jar 包
+	1.2 加入 Spring 的 配置文件
+	1.3 在 ServletContextListener 的 contextInitialized 方法中创建 IOC 容器.
+	而且, 创建 IOC 容器后, 最好是把 IOC 容器的实例放入到 application 作用域中. 
+	实际上 Spring 提供了这样的 Listener.
+	
+	实际开发时, 直接在 web.xml 文件中配置  contextConfigLocation 初始化参数标识 Spring 配置文件的位置和名称, 
+	配置 ContextLoaderListener 来创建 IOC 容器即可.
+	
+	2. 集成 Struts2
+	2.1 加入 Struts2 的 jar 包.
+	2.2 在 web.xml 文件中配置 Struts2 的 Filter
+	2.3 在类路径下添加 Struts2 的配置文件
+	
+	2.4 Sping 整合 Struts2 
+	2.4.1 整合的目标: IOC 容器创建 Action 实例.
+	2.4.2 在 IOC 容器中正常配置 Action. 注意: 必须配置 scope 属性为 prototype. 因为 Struts2 的 Action 不是单例的!
+	2.4.3 在 Struts2 的配置文件中配置 action 节点. 使 action 节点的 class 属性指向 上一步配置的 Action 的 id.
+	2.4.4 加入  struts2-spring-plugin-2.3.15.3.jar
+	
+	2.4.5 原理?
+	1). struts2-spring-plugin-2.3.15.3.jar 包中的 struts-plugin.xml 中修改了 struts.objectFactory, 
+	使其指向 org.apache.struts2.spring.StrutsSpringObjectFactory
+	2). 而  org.apache.struts2.spring.StrutsSpringObjectFactory 重写了 buildBean 方法.
+	
+	2.4.6 整合的好处: Struts2 的 Action 中可以注入 IOC 容器中的其他的 bean!
+	
+	public Object buildBean(String beanName, Map<String, Object> extraContext, boolean injectInternal) throws Exception {
+        Object o;
+        
+        //1. 先检查 IOC 容器中是否有指定 beanName 的 bean. 该 beanName 即为 action 节点的 class 属性值. 
+        //若在 IOC 容器中已经配置了对应的 bean, 则直接返回. 
+        if (appContext.containsBean(beanName)) {
+            o = appContext.getBean(beanName);
+        } 
+        //IOC 容器中没有, 则通过反射创建. 
+        else {
+            Class beanClazz = getClassInstance(beanName);
+            o = buildBean(beanClazz, extraContext);
+        }
+        if (injectInternal) {
+            injectInternalBeans(o);
+        }
+        
+        //2. 返回 bean. 
+        return o;
+    }
+	
+	-->
+	
+	<!-- 指定 Spring 配置问文件的位置和名称 -->	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:beans.xml</param-value>
+	</context-param>
+	
+	<!-- 配置创建 Spring IOC 容器的 ServletContextListener -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- 配置 Struts2 的 Filter -->
+	<filter>
+        <filter-name>struts2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>struts2</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+</web-app>

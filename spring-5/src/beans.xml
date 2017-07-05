@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="person"
+		class="com.atguigu.spring.Person">
+		<property name="lastName" value="atguigu"></property>	
+	</bean>
+	
+	<!-- 
+		配置 Struts2 的 Action 
+		注意: 因为 Struts2 的 Action 不是单例的. 所以必须设置 scope 属性为 prototype!
+	-->
+	<bean id="personAction"
+		class="com.atguigu.spring.PersonAction"
+		scope="prototype">
+		<property name="person" ref="person"></property>	
+	</bean>
+
+</beans>

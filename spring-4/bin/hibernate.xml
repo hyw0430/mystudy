@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<!--  
+		Spring 整合 Hibernate
+		1. 加入 Hibernate 的 jar 包
+		2. 加入 hibernate 的配置文件: 
+		在其中只需要配置 hibernate 的基本属性. 其他配置转移到 Spring 中的配置文件中. 
+		3. 在 Spring 的配置文件中使用 LocalSessionFactoryBean 来配置 SessionFactory 实例
+		3.1 需要配置的属性: 数据源, hibernate 配置文件的位置和名称, 映射文件的位置
+		4. 配置 hibernate 的事务管理器.
+		5. 配置支持基于直接的事务
+		
+		6. Dao 类中:
+		6.1 注入 SessionFactory 实例
+		6.2 使用 getCurrentSession() 来获取 Session 的实例
+		
+		7. 在 Service 的方法上添加 @Transactional 注解来标记事务方法. 
+		8. 测试 Service 方法. 
+	-->
+	
+	<context:component-scan base-package="com.atguigu.spring.hibernate"></context:component-scan>
+	
+	<context:property-placeholder location="classpath:db.properties"/>
+	
+	<bean id="dataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="user" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<property name="driverClass" value="${jdbc.driverClass}"></property>
+		<property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>	
+	</bean>
+	
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+		<property name="mappingLocations" value="classpath:com/atguigu/spring/hibernate/*.hbm.xml"></property>
+	</bean>
+	
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>	
+	</bean>
+	
+	<tx:annotation-driven/>
+	
+</beans>

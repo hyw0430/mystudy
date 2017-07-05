@@ -1,0 +1,16 @@
+1. 加入 hibernate 和 struts2 的 jar 包以后, javassist-3.15.0-GA.jar 和 javassist-3.11.0.GA.jar 重复, 
+删除较低版本的.
+
+2. 加入 hibernate ehcache 相关的 jar 包, 启用 hibernate 的二级缓存.
+
+3. 不再使用 hibernate.cfg.xml 文件, 所有 hibernate 的配置都放在 Spring 的配置文件中.
+
+4. 直接导入 ssh.sql 到 mysql 数据库中.
+
+5. 因为页面需要显示当前 Employee 和其关联的 Department 的信息, 所以查询 Employee 时需要 LEFT OUTER JOIN FETCH Department
+
+6. 不能直接显示 input.jsp 页面, 因为该页面中的 department 的下拉框来自于数据库. 
+
+7. 缓存的配置, 加入到 .hbm.xml 文件的 class 节点的第一个子节点: <cache usage="read-only"/>
+
+8. 编写日期转换器。 

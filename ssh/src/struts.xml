@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.devMode" value="true" />
+
+    <package name="default" namespace="/" extends="struts-default">
+		
+		<!-- 修改默认使用的拦截器栈 -->
+		<interceptors>
+			<interceptor-stack name="sshStack">
+				<interceptor-ref name="paramsPrepareParamsStack">
+					<param name="prepare.alwaysInvokePrepare">false</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		
+		<default-interceptor-ref name="sshStack"></default-interceptor-ref>
+		
+		<action name="emp-*"
+			method="{1}"
+			class="employeeAction">
+			<result name="list">/WEB-INF/pages/list.jsp</result>
+			<result type="redirect">/emp-list</result>	
+			<result name="emp-input">/WEB-INF/pages/input.jsp</result>
+			
+			<result name="edit">/WEB-INF/pages/edit.jsp</result>
+		</action>
+        
+    </package>
+
+</struts>

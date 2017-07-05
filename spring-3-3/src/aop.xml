@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- 配置自动扫描的包 -->
+	<context:component-scan base-package="com.atguigu.spring.aop"></context:component-scan>
+
+	<!--  
+		1. 导入 aop 命名空间
+		2. 配置自动生成代理类的对象.<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+		3. 正常在 IOC 容器中配置 bean 的实例
+		4. 配置切面 bean 的实例. 并使用 @Aspect 注解标识其是一个切面类
+		5. 在切面的方法上使用 AOP 注解标记为特定的通知:
+		@Before: 前置通知, 在方法执行之前执行
+		@After: 后置通知, 在方法执行之后执行 
+		@AfterRunning: 返回通知, 在方法返回结果之后执行
+		@AfterThrowing: 异常通知, 在方法抛出异常之后
+		@Around: 环绕通知, 围绕着方法执行
+		6. 使用注解的 value 属性值来标识其其作用于哪个类的哪个方法. 		
+	-->
+	<!-- 配置是否自动生成代理对象 -->
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+</beans>
