@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+	
+	<!-- 
+		用的不多. 
+		通过 p 命名空间的方式为属性赋值 
+		现需要导入命名空间. 此时不再需要 property 子节点. 
+	-->
+	<bean id="testP"
+		class="com.atguigu.helloworld.Person"
+		p:car-ref="car"
+		p:lastName="testP">	
+	</bean>
+	
+	<!-- 为 Properties 类型的属性赋值 -->
+	<bean id="testPropertiesProperty"
+		class="com.atguigu.helloworld.Person">
+		<property name="interestings">
+			<!-- 通过 props 子节点为 Properties 类型的属性赋值 -->
+			<props>
+				<prop key="jdbcUrl">jdbc:mysql:///test</prop>
+				<prop key="user">root</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 
+		了解: 声明外部的集合 bean 
+		需要导入 util 命名空间
+	-->
+	<util:list id="wscs">
+		<ref bean="wsc"/>
+		<ref bean="wsc2"/>
+	</util:list>
+	
+	<bean id="testCollectionProperty2"
+		class="com.atguigu.helloworld.Person">
+		<property name="friends" ref="wscs"></property>	
+	</bean>
+	
+	<!-- 了解: 为集合类型的属性赋值 -->
+	<bean id="testCollectionProperty"
+		class="com.atguigu.helloworld.Person">
+		<property name="friends">
+			<!-- 声明使用内部的 list bean -->
+			<list>
+				<ref bean="wsc"/>
+				<ref bean="wsc2"/>
+			</list>
+		</property>	
+	</bean>
+	
+	<!-- 了解: 为级联属性赋值 -->
+	<bean id="wsc2"
+		class="com.atguigu.helloworld.Person">
+		<property name="lastName" value="wsc2"></property>
+		<property name="car">
+			<!-- 内部 bean, 类似于匿名内部类. 不需要配置 id 属性, 外部无法引用. -->
+			<bean class="com.atguigu.helloworld.Car">
+				<property name="brand" value="wscmsld"></property>
+				<property name="price" value="1000"></property>
+				<property name="speed" value="300"></property>
+			</bean>
+		</property>	
+		
+		<!-- 为级联属性赋值 -->
+		<property name="car.price" value="10"></property>
+	</bean>
+	
+	<!-- 了解: 为属性赋值为 null -->
+	<bean id="testNull"
+		class="com.atguigu.helloworld.Car">
+		<property name="brand"><null/></property>	
+	</bean>
+	
+	<!-- 内部 bean -->
+	<bean id="wsc"
+		class="com.atguigu.helloworld.Person">
+		<property name="lastName" value="wsc"></property>
+		<property name="car">
+			<!-- 内部 bean, 类似于匿名内部类. 不需要配置 id 属性, 外部无法引用. -->
+			<bean class="com.atguigu.helloworld.Car">
+				<property name="brand" value="wscmsld"></property>
+				<property name="price" value="1000"></property>
+				<property name="speed" value="300"></property>
+			</bean>
+		</property>	
+	</bean>
+	
+	<!-- 装配 bean 之间的引用关系 -->
+	<bean id="carDao2"
+		class="com.atguigu.helloworld.CarDao"></bean>
+	
+	<bean id="carService7"
+		class="com.atguigu.helloworld.CarService">
+		<!-- 使用 property 的 ref 属性来引用其他的 bean! -->
+		<property name="carDao" ref="carDao2"></property>	
+	</bean>
+	
+	<bean id="carAction"
+		class="com.atguigu.helloworld.CarAction">
+		<property name="carService" ref="carService7"></property>	
+	</bean>
+	
+	<!-- 通过构造器为属性注入值 -->
+	<bean id="car"
+		class="com.atguigu.helloworld.Car">
+		<constructor-arg>
+			<!-- 了解: 可以使用 CDATA 注入特殊字符 -->
+			<value><![CDATA[<mazda>]]></value>
+		</constructor-arg>
+		<constructor-arg value="20"></constructor-arg>
+		<constructor-arg value="200"></constructor-arg>	
+	</bean>
+	
+	<!-- 配置 bean. 实际上通过反射创建 bean 的实例. id 是留给 IOC 容器的 getBean 方法用的. -->
+	<bean id="helloWorld"
+		class="com.atguigu.helloworld.HelloWorld">
+		<!-- 配置属性值. 实际上通过 setter 方法为 name 赋值 -->
+		<property name="name" value="tom"></property>	
+	</bean>
+	
+	<bean id="helloWorld2"
+		class="com.atguigu.helloworld.HelloWorld">
+		<property name="name" value="jerry"></property>	
+	</bean>
+
+</beans>

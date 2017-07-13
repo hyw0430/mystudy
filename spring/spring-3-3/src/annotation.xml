@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<!--  
+		1. 导入 context 命名空间
+		2. 指定扫描的组件的包
+		3. 在对应的 bean 上添加注解: @Controller, @Service, @Repository, @Component
+		可以使用注解的 value 属性值来指定 bean 在 IOC 容器中的 id. 默认 id 为类名第一个字母小写
+		4. 可以使用 @Autowired 来完成属性的装配
+		5. 可以完成泛型注入: 根据泛型的类型装配对应的 bean。 
+	-->
+	
+	<!-- 配置自动扫描的包 -->
+	<context:component-scan base-package="com.atguigu.spring"></context:component-scan>
+
+</beans>

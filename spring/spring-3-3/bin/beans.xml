@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<!--  
+		配置使用 NamedParameterJdbcTemplate. 
+		该 bean 没有无参数的构造器. 创建对象时可以传入 DataSource 对象进去. 
+	-->
+	<bean id="namedParameterJdbcTemplate"
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource"></constructor-arg>	
+	</bean>
+	
+	<!--  
+		使用 Spring 的 JdbcTemplate 完成对数据表的 CRUD 操作
+		类似于 dbutils
+	-->
+	<bean id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>	
+	</bean>
+	
+	<!--  
+		正常配置 FactoryBean 实例. 但 IOC 容器返回的确实 FactoryBean#getObject() 方法对应的实例. 
+	-->
+	<bean id="testFactoryBean"
+		class="com.atguigu.spring.beans.MyFactoryBean"/>
+	
+	<!--  
+		通过实例工厂方法来创建 Bean 的实例.
+		1. 配置工厂的实例
+		2. 使用工厂实例来配置 bean 实例
+	-->
+	<bean id="dateFormat"
+		class="java.text.SimpleDateFormat">
+		<constructor-arg value="yyyy-MM-dd hh:mm:ss"></constructor-arg>	
+	</bean>
+	
+	<bean id="date"
+		factory-bean="dateFormat" factory-method="parse">
+		<constructor-arg value="1992-11-11 11:11:11"></constructor-arg>	
+	</bean>
+	
+	<!--  
+		BeanPostProcessor:
+		1. 需要实现 BeanPostProcessor 接口
+		2. 需要配置在 IOC 容器中. 但不需要配置 id, IOC 容器会自动的识别它. 
+		3. BeanPostProcessor 的 API
+	-->
+	<bean class="com.atguigu.spring.beans.MyBeanPostProcessor"></bean>
+
+	<!--  
+		bean 的声明周期
+		1. 通常情况下, 对于单例的 bean 使用生命周期
+		2. 对于单例的 bean, IOC 容器创建时, 即创建了 Bean 实例, 并调用了 setter 方法为属性进行赋值.
+		
+		生命周期:
+		1. IOC 容器调用构造器, 创建 bean 的实例
+		2. IOC 容器调用 setter 方法为属性赋值. 
+		3. IOC 容器调用 BeanPostProcessor 的 postProcessBeforeInitialization 方法
+		4. IOC 容器调用 init-method 对应的方法
+		5. IOC 容器调用 BeanPostProcessor 的 postProcessAfterInitialization 方法
+		6. 可以使用 bean
+		7. IOC 容器关闭的时候, 调用 destroy-method 对应的方法. 
+	-->
+	<bean id="testLiftCycle"
+		class="com.atguigu.spring.beans.Person"
+		init-method="init" destroy-method="destroy">
+		<property name="lastName" value="atguigu"></property>	
+	</bean>
+
+	<!--  
+		添加 context 命名空间
+		导入资源文件
+		像使用 EL 那样使用资源文件中的 value
+	-->
+	<context:property-placeholder location="classpath:db.properties"/>
+
+	<bean id="dataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="user" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<property name="driverClass" value="${jdbc.driverClass}"></property>
+		<property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>	
+	</bean>
+
+	<!--  
+		默认情况下 bean 在 IOC 容器中是单例的. 
+		可以通过 bean 的 scope 属性来指定 bean 的作用域
+		prototype: 原型的. 即每次调用 getBean 方法都会返回一个新的 bean 实例
+		singleton: 单例的. 默认值. 
+	-->
+	<bean id="person"
+		class="com.atguigu.spring.beans.Person"
+		scope="prototype"></bean>
+
+</beans>

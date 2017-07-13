@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- 使用 XML 文件的方式来配置 AOP -->
+	
+	<!-- 1. 配置 bean -->
+	<bean id="arithmeticCalculator"
+		class="com.atguigu.spring.aop.xml.ArithmeticCalculatorImpl"></bean>
+
+	<bean id="loggingAspect"
+		class="com.atguigu.spring.aop.xml.LoggingAspect"></bean>
+
+	<bean id="validationAspect"
+		class="com.atguigu.spring.aop.xml.ValidationAspect"></bean>
+
+	<!-- 2. 配置 AOP -->
+	<aop:config>
+		<!-- 2.1 配置切点表达式 -->
+		<aop:pointcut expression="execution(* com.atguigu.spring.aop.xml.ArithmeticCalculator.*(..))" 
+			id="pointcut"/>
+		<!-- 2.2 配置通知 -->
+		<aop:aspect ref="loggingAspect" order="100">
+			<aop:before method="before" pointcut-ref="pointcut"/>
+			<aop:after method="after" pointcut-ref="pointcut"/>
+			<aop:after-returning method="afterReturning" pointcut-ref="pointcut" returning="result"/>
+			<aop:after-throwing method="afterThrowing" pointcut-ref="pointcut" throwing="ex"/>
+		
+			<aop:around method="around" pointcut-ref="pointcut"/>
+		</aop:aspect>	
+		
+		<aop:aspect ref="validationAspect" order="50">
+			<aop:before method="validate" pointcut-ref="pointcut"/>
+		</aop:aspect>
+	</aop:config>
+
+</beans>
