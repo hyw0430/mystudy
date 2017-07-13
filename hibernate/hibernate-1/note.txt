@@ -1,0 +1,26 @@
+1. 安装 eclipse 的 hibernate 插件
+
+2. 搭建环境:
+1). 加入 jar 包, 并加入到类路径下
+①. 加入 hibernate 的 jar 包:
+hibernate-release-4.2.4.Final\lib\required\*.jar
+
+②. 加入 mysql 的驱动:
+
+3. 利用 hibernate 插件创建 hibernate.cfg.xml 文件
+1). 配置 hibernate 连接数据库的基本属性:
+2). 配置 hibernate 的基本属性:
+①. 方言
+②. 生成数据表的策略
+③. 是否在控制台打印 SQL
+④. 是否对 SQL 进行格式化
+
+4. 创建持久化类: 正常的 javabean 即可
+
+5. 利用 hibernate 插件创建 Xxx.hbm.xml 文件(即 hiberante 映射文件)
+1). 映射 类 和数据表
+2). 映射主键, 注意修改了主键的生成方式为 native
+3). 映射属性和数据表的列
+4). 在 hibernate.cfg.xml 文件中加入映射文件
+
+6. 编写 main 方法进行测试

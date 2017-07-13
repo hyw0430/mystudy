@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.atguigu.hibernate.test.Student" table="HIBERNATE_STUDENTS">
+        
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        
+        <!--  
+        type: 指定属性的类型. 建议指定. 
+                   了解. update: 若指定为 false, 则该字段不能被更新. 很少需要被指定. 
+                   了解. index 可以指定索引. 
+        -->
+        <property name="lastName" type="java.lang.String" index="my_index">
+        	<!--  
+        	unique: 是否添加唯一约束. 
+        	length: 指定字段的长度.
+        	-->
+            <column name="LAST_NAME" unique="true" length="30" />
+        </property>
+        
+        <property name="email" type="java.lang.String" update="false" index="my_index">
+            <column name="EMAIL" />
+        </property>
+        
+        <!-- 
+                    映射 Date 类型 
+                    必须指定 type, 以精准的映射数据表的列的类型. 可以使用 hibernate 提供的映射类型.
+                    分别可以取值 date, time, timestamp
+        -->
+        <property name="birth" type="timestamp" column="birth"></property>
+        
+        <!--  
+                   了解. 映射 Blob 类型的数据
+        -->
+        <property name="picture" type="java.sql.Blob">
+        	<column name="picture"></column>
+        </property>
+        
+        <!-- 
+                   映射派生属性 
+        formular: 会在查询的时候生成子查询语句. 
+        1. 因为是子查询, 所以需要使用数据表的表名和列名. 而不是实体类的类名和属性名. 
+        2. formular 的语句必须放在 () 内. 因为要以一个子查询的方式出现.
+        3. where 条件通常使用 id 连接. 
+        -->
+        <property name="info" type="java.lang.String" formula="(SELECT concat('id:',s.id,',lastName:',s.last_name,',email:',s.email) FROM hibernate_students s WHERE s.id = id)"></property>
+        
+    </class>
+</hibernate-mapping>

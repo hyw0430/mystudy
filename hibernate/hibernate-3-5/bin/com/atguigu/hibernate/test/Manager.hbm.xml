@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-10-26 9:31:39 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.atguigu.hibernate.test.Manager" table="HIBERNATE_MANAGER">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <property name="lastName" type="java.lang.String">
+            <column name="LAST_NAME" />
+        </property>
+        
+        <!-- 使用外键映射 1-1 的关联关系 -->
+        <many-to-one name="dept" class="com.atguigu.hibernate.test.Department"
+        	column="DEPT_ID" unique="true"></many-to-one>
+    </class>
+</hibernate-mapping>

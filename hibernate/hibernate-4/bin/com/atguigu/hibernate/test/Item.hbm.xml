@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.atguigu.hibernate.test.Item" table="HIBERNATE_ITEMS">
+        
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        
+        <property name="itemName" type="java.lang.String">
+            <column name="ITEM_NAME" />
+        </property>
+		
+		<set name="categories" table="CATEGORY_ITEM">
+			<key column="ITEM_ID"></key>
+			<many-to-many class="com.atguigu.hibernate.test.Category" column="CATEGORY_ID"></many-to-many>
+		</set>
+		        
+    </class>
+</hibernate-mapping>

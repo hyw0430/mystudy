@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-10-26 9:16:51 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.atguigu.hibernate.test.Customer" 
+    	table="HIBERNATE_CUSTOMERS">
+        
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        
+        <property name="lastName" type="java.lang.String">
+            <column name="LAST_NAME" />
+        </property>
+		
+		
+		<!-- 映射 1-n 的关联关系 -->
+		<set name="orders" 
+			table="HIBERNATE_ORDERS" inverse="true" lazy="true" fetch="select" batch-size="2">
+			<key column="CUSTOMER_ID"></key>
+			<one-to-many class="com.atguigu.hibernate.test.Order"/>
+		</set>        
+		        
+    </class>
+</hibernate-mapping>

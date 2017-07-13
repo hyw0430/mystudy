@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-10-26 9:02:06 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.atguigu.hibernate.test.Order" table="HIBERNATE_ORDERS" lazy="true">
+        
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        
+        <property name="orderNumber" type="java.lang.String">
+            <column name="ORDER_NUMBER" />
+        </property>
+        
+        <!--  
+        	可以选择使用 date, time 或 timestamp. 分别对应 日期, 时间 和 日期时间
+        -->
+        <property name="orderDate" type="timestamp">
+            <column name="ORDER_DATE" />
+        </property>
+        
+        <!-- 映射派生属性 -->
+        <property name="info" formula="(SELECT concat('[Order] id:',o.id,',orderNumber:',o.order_number) FROM hibernate_orders o WHERE o.id = id)"></property>
+        
+        <!-- 映射多对一的关联关系 -->
+        <many-to-one name="customer" column="CUSTOMER_ID"
+        	lazy="proxy" 
+        	fetch="select"
+        	class="com.atguigu.hibernate.test.Customer"></many-to-one>
+    </class>
+    
+    <query name="getAll">
+    	<![CDATA[
+    	FROM Order o WHERE o.customer.id > ? AND o.customer.id < ?
+    	]]>
+    </query>
+    
+</hibernate-mapping>

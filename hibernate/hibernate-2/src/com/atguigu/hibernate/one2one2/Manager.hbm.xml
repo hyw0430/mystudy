@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-10-24 16:41:41 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.atguigu.hibernate.one2one2.Manager" table="HIBERNATE_MANAGERS">
+        
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <!-- 
+            	使用外键的生成策略.
+            	同时使用 property 指定使用当前持久化类的哪一个属性所在的数据表的主键作为外键.  
+            -->
+            <generator class="foreign">
+            	<param name="property">department</param>
+            </generator>
+        </id>
+        
+        <property name="lastName" type="java.lang.String">
+            <column name="LAST_NAME" />
+        </property>
+        
+        <!-- 
+        	使用 one-to-one 来映射关联关系 
+        	若当前数据表的主键使用其他数据表的主键作为外键来生成的. 则在映射这个属性时需要配置 constrained="true"
+        	以在主键上添加外键约束. 
+        -->
+        <one-to-one name="department" 
+        	class="com.atguigu.hibernate.one2one2.Department"
+        	constrained="true"></one-to-one>
+        
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-10-24 11:04:36 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.atguigu.hibernate.Order" table="HIBERNATE_ORDERS">
+        
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        
+        <property name="orderNumber" type="java.lang.String">
+            <column name="ORDER_NUMBER" length="50" />
+        </property>
+        
+        <!-- 
+        	映射多对一的关联关系. 
+        	使用 many-to-one 来映射多对一的关联关系. 
+        	name 指定多的一端对一的一端引用的属性名.
+        	class 指定属性的类型
+        	column 指定外键列的列名.
+        	
+        	hibernate 会自动创建外键关联关系. 
+        -->
+        <many-to-one name="customer" class="com.atguigu.hibernate.Customer"
+        	column="CUSTOMER_ID"></many-to-one>
+        
+    </class>
+</hibernate-mapping>

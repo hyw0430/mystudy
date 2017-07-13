@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.atguigu.hibernate.one2many.Customer" table="HIBERNATE_CUSTOMERS">
+
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        
+        <property name="lastName" type="java.lang.String">
+            <column name="LAST_NAME" />
+        </property>
+        
+        <!-- 映射 1 对多 的关联关系 -->
+        <set name="orders" table="HIBERNATE_ORDERS">
+        	<!-- 映射 table 数据表中的外键列 -->
+        	<key column="CUSTOMER_ID"></key>
+        	<!-- 指定映射的类型 -->
+        	<one-to-many class="com.atguigu.hibernate.one2many.Order"/>
+        </set>
+        
+    </class>
+</hibernate-mapping>

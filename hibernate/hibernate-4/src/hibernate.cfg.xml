@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+    	<!-- 连接数据库的基本信息 -->
+    	<property name="hibernate.connection.username">root</property>
+    	<property name="hibernate.connection.password">1230</property>
+    	<property name="hibernate.connection.url">jdbc:mysql:///hibernate</property>
+    	<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    	
+    	<property name="hibernate.c3p0.min_size">5</property>
+    	
+    	<!-- hibernate 的基本属性 -->
+    	<property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+    	<property name="hibernate.hbm2ddl.auto">update</property>
+    	<property name="hibernate.show_sql">true</property>
+    	<property name="hibernate.format_sql">true</property>
+    	
+    	<!-- 二级缓存相关配置 -->
+    	<!-- 配置启用二级缓存 -->
+    	<property name="hibernate.cache.use_second_level_cache">true</property>
+    	<!-- 配置二级缓存的使用产品 -->
+    	<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+    	<!-- 配置启用查询缓存 -->
+    	<property name="hibernate.cache.use_query_cache">true</property>
+    	
+    	<!-- 配置管理 Session 的方式 -->
+    	<property name="hibernate.current_session_context_class">thread</property>
+    	
+    	<!-- 关联的映射文件 -->
+    	<mapping resource="com/atguigu/hibernate/test/Order.hbm.xml"/>
+    	<mapping resource="com/atguigu/hibernate/test/Customer.hbm.xml"/>
+    	
+    	<mapping resource="com/atguigu/hibernate/test/Item.hbm.xml"/>
+		<mapping resource="com/atguigu/hibernate/test/Category.hbm.xml"/>
+		
+		<!-- 配置需要缓存的类 -->
+		<class-cache usage="read-write" class="com.atguigu.hibernate.test.Order"/>
+		
+		<class-cache usage="read-write" class="com.atguigu.hibernate.test.Category"/>    	
+		<class-cache usage="read-write" class="com.atguigu.hibernate.test.Item"/>
+		<collection-cache usage="read-write" collection="com.atguigu.hibernate.test.Category.items"/>
+		    	
+    </session-factory>
+</hibernate-configuration>

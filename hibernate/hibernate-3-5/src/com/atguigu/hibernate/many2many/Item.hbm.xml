@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    
+    <class name="com.atguigu.hibernate.many2many.Item" table="HIBERNATE_ITEMS">
+        
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        
+        <property name="itemName" type="java.lang.String">
+            <column name="ITEM_NAME" />
+        </property>
+        
+        <!-- 映射映射多对多的关联关系 -->
+        <set name="categories" table="CATEGORY_ITEM" inverse="true">
+        	<key column="ITEM_ID"></key>
+        	<!-- 指定映射的类型 -->
+        	<many-to-many column="CATEGORY_ID" class="com.atguigu.hibernate.many2many.Category"></many-to-many>
+        </set>
+        
+    </class>
+</hibernate-mapping>

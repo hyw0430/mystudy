@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.atguigu.hibernate.one2one.Manager" table="HIBERNATE_MANAGERS">
+        
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        
+        <property name="lastName" type="java.lang.String">
+            <column name="LAST_NAME" />
+        </property>
+        
+        <!-- 
+        	映射 1-1 的关联关系. 若对方数据表中已经有外键了, 则当前的数据表中就不需要在使用外键列了! 
+        	直接使用 one-to-one 来进行映射. 
+        -->
+        <one-to-one name="department" 
+        	class="com.atguigu.hibernate.one2one.Department"
+        	property-ref="manager"></one-to-one>
+        
+    </class>
+</hibernate-mapping>

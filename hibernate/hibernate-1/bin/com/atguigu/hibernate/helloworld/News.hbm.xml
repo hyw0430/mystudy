@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<!--  
+package: 若在 hibernate-mapping 节点中设置了 package 属性, 则在 class 节点的 name 属性中就可以直接使用此处设置的 package
+-->
+<hibernate-mapping package="com.atguigu.hibernate.helloworld">
+	<!-- 映射类和数据表 -->
+	<!--  
+	name: 类名
+	table: 数据表的表名. 一般的, 表名都需要设置一个前缀. 
+	了解. dynamic-update 和 dynamic-insert: 可以根据 bean 被修改和属性的情况动态生成 SQL
+	了解. select-before-update: 在 update 游离对象之前, 先执行 select. 通常不需要设置该属性. 
+	-->
+    <class name="News" table="HIBERNATE_NEWS" dynamic-update="true" select-before-update="true">
+        <!-- 
+                   映射 ID 
+        name: id 的属性名
+        type: id 的类型. 需要填写为全类名. 
+        column: 映射列的名字.
+        generator: 映射主键的生成方式。 
+        
+                  了解. unsaved-value: 若设置了该属性, 则若 bean 的 id 取值和 unsaved-value 的值一致, 则 hibernate 会认为其是
+                  一个临时对象. 
+        -->
+        <id name="id" type="java.lang.Integer" unsaved-value="10000">
+            <column name="ID" />
+            <!-- 映射主键的生成方式. native: 使用数据库本地的方式来生成记录的主键. 对于 MySQL 将使用自增的方式来生成主键 -->
+            <!--  
+            class: 指定使用的主键生成策略. 
+                             了解. increment: 开发时不能使用. 仅在测试时使用, 多并发情况下, 会出现主键值重复. 
+            identity: 数据表以自增的方式来生成主键. 前提是数据库支持 自增 这个方式. DB2, Mysql, MSSQLServer, Sybase 
+            * sequence: 使用序列生成数据表的主键, 适用于数据库支持序列的数据库. Oracle, DB2 等.    
+            hilo: hibernate 使用高低算法来生成数据表的主键. table 指定高低算法种子所在的数据表的表名. column 指定种子的列的名字.
+                             使用 hilo 的好处是, 不需要依赖于底层的数据库.      
+            native: 依据底层数据库对自动生成标识符的支持能力, 来选择使用 identity, sequence 或 hilo 标识符生成器. 
+            
+                             结论: 使用 native.                     
+            -->
+            <generator class="native"></generator>
+            <!--  
+            <generator class="hilo">
+                <param name="table">hi_value</param>
+                <param name="column">next_value</param>
+                <param name="max_lo">100</param>
+        	</generator>
+            -->
+            <!--  
+            <generator class="sequence">
+            	<param name="sequence">my_seq</param>
+            </generator>
+            -->
+        </id>
+        
+        <!-- 映射其他属性 -->
+        <property name="title" type="java.lang.String">
+            <column name="TITLE" />
+        </property>
+        
+        <property name="author" type="java.lang.String">
+            <column name="AUTHOR" />
+        </property>
+        
+    </class>
+</hibernate-mapping>
